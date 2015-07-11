@@ -6,7 +6,11 @@ module.exports = ShrinkWhitespace =
 
   shrink: ->
     editor = atom.workspace.getActiveTextEditor()
-    cursor = editor.getLastCursor()
+    editor.getLastCursor()
+    for cursor in editor.getCursors()
+      @shrinkAtCursor(cursor)
+
+  shrinkAtCursor: (cursor) ->
     if @justOneSpace(cursor)
       @deleteHorizontalSpace(cursor)
     else if not @lineHasMeat(cursor)
