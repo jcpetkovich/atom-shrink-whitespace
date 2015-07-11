@@ -1,15 +1,16 @@
 {
   "name": "shrink-whitespace",
   "main": "./lib/shrink-whitespace",
-  "version": "0.0.0",
-  "description": "A short description of your package",
+  "version": "0.0.1",
+  "description": "Shrink whitespace dwim key.",
   "keywords": [
+    "editing",
+    "whitespace"
   ],
   "activationCommands": {
-    "atom-workspace": "shrink-whitespace:toggle",
     "atom-workspace": "shrink-whitespace:shrink"
   },
-  "repository": "https://github.com/atom/shrink-whitespace",
+  "repository": "https://github.com/jcpetkovich/atom-shrink-whitespace",
   "license": "MIT",
   "engines": {
     "atom": ">=1.0.0 <2.0.0"

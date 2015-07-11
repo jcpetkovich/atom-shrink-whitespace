@@ -1,10 +1,7 @@
-ShrinkWhitespaceView = require './shrink-whitespace-view'
 {CompositeDisposable} = require 'atom'
 {Range} = require 'text-buffer'
 
 module.exports = ShrinkWhitespace =
-  shrinkWhitespaceView: null
-  modalPanel: null
   subscriptions: null
 
   shrink: ->
