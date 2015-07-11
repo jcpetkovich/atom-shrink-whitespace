@@ -1,7 +1,7 @@
 {
   "name": "shrink-whitespace",
   "main": "./lib/shrink-whitespace",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "Shrink whitespace dwim key.",
   "keywords": [
     "editing",
