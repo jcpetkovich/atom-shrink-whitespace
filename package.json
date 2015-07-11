@@ -1,0 +1,20 @@
+{
+  "name": "shrink-whitespace",
+  "main": "./lib/shrink-whitespace",
+  "version": "0.0.0",
+  "description": "A short description of your package",
+  "keywords": [
+  ],
+  "activationCommands": {
+    "atom-workspace": "shrink-whitespace:toggle",
+    "atom-workspace": "shrink-whitespace:shrink"
+  },
+  "repository": "https://github.com/atom/shrink-whitespace",
+  "license": "MIT",
+  "engines": {
+    "atom": ">=1.0.0 <2.0.0"
+  },
+  "dependencies": {
+    "text-buffer": "6.3.8"
+  }
+}
