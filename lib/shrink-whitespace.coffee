@@ -101,6 +101,8 @@ module.exports = ShrinkWhitespace =
   setJustOneSpace: (cursor) ->
     range = @getMeatlessWordBoundary(cursor)
     cursor.editor.setTextInBufferRange(range, " ")
+    {start} = range
+    cursor.setBufferPosition([start.row, start.column + 1])
 
   activate: (state) ->
     # Events subscribed to in atom's system can be easily cleaned up with a CompositeDisposable

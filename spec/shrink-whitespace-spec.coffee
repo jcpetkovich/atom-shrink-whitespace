@@ -6,57 +6,68 @@ ShrinkWhitespace = require '../lib/shrink-whitespace'
 # or `fdescribe`). Remove the `f` to unfocus the block.
 
 describe "ShrinkWhitespace", ->
-  [workspaceElement, activationPromise] = []
+  [workspaceElement, activationPromise, editor, editorView] = []
 
   beforeEach ->
     workspaceElement = atom.views.getView(atom.workspace)
     activationPromise = atom.packages.activatePackage('shrink-whitespace')
 
-  describe "when the shrink-whitespace:toggle event is triggered", ->
-    it "hides and shows the modal panel", ->
-      # Before the activation event the view is not on the DOM, and no panel
-      # has been created
-      expect(workspaceElement.querySelector('.shrink-whitespace')).not.toExist()
+    waitsForPromise ->
+      atom.workspace.open()
 
-      # This is an activation event, triggering it will cause the package to be
-      # activated.
-      atom.commands.dispatch workspaceElement, 'shrink-whitespace:toggle'
+    runs ->
+      editor = atom.workspace.getActiveTextEditor()
+      editorView = atom.views.getView(editor)
 
+  describe "when the shrink-whitespace:shrink event is triggered", ->
+    it "Changes a sequence of blank lines into a single blank line", ->
+      atom.commands.dispatch editorView, 'shrink-whitespace:shrink'
       waitsForPromise ->
         activationPromise
 
-      runs ->
-        expect(workspaceElement.querySelector('.shrink-whitespace')).toExist()
+      editor.setText("one\n\n\ntwo\n\n\nthree\n")
+      editor.setCursorBufferPosition([2, 0])
+      atom.commands.dispatch editorView, 'shrink-whitespace:shrink'
+      expect(editor.getText()).toBe("one\n\ntwo\n\n\nthree\n")
+      expect(editor.getCursorBufferPosition()).toEqual({row: 1, column: 0})
 
-        shrinkWhitespaceElement = workspaceElement.querySelector('.shrink-whitespace')
-        expect(shrinkWhitespaceElement).toExist()
-
-        shrinkWhitespacePanel = atom.workspace.panelForItem(shrinkWhitespaceElement)
-        expect(shrinkWhitespacePanel.isVisible()).toBe true
-        atom.commands.dispatch workspaceElement, 'shrink-whitespace:toggle'
-        expect(shrinkWhitespacePanel.isVisible()).toBe false
-
-    it "hides and shows the view", ->
-      # This test shows you an integration test testing at the view level.
-
-      # Attaching the workspaceElement to the DOM is required to allow the
-      # `toBeVisible()` matchers to work. Anything testing visibility or focus
-      # requires that the workspaceElement is on the DOM. Tests that attach the
-      # workspaceElement to the DOM are generally slower than those off DOM.
-      jasmine.attachToDOM(workspaceElement)
-
-      expect(workspaceElement.querySelector('.shrink-whitespace')).not.toExist()
-
-      # This is an activation event, triggering it causes the package to be
-      # activated.
-      atom.commands.dispatch workspaceElement, 'shrink-whitespace:toggle'
-
+    it "Changes a single blank line into no blank lines", ->
+      atom.commands.dispatch editorView, 'shrink-whitespace:shrink'
       waitsForPromise ->
         activationPromise
 
-      runs ->
-        # Now we can test for view visibility
-        shrinkWhitespaceElement = workspaceElement.querySelector('.shrink-whitespace')
-        expect(shrinkWhitespaceElement).toBeVisible()
-        atom.commands.dispatch workspaceElement, 'shrink-whitespace:toggle'
-        expect(shrinkWhitespaceElement).not.toBeVisible()
+      editor.setText("one\n\ntwo\n\nthree\n")
+      editor.setCursorBufferPosition([1, 0])
+      atom.commands.dispatch editorView, 'shrink-whitespace:shrink'
+      expect(editor.getText()).toBe("one\ntwo\n\nthree\n")
+      expect(editor.getCursorBufferPosition()).toEqual({row: 1, column: 0})
+
+    it "Changes a sequence of horizontal space into a single space", ->
+      atom.commands.dispatch editorView, 'shrink-whitespace:shrink'
+      waitsForPromise ->
+        activationPromise
+
+      editor.setText("one\t   \t two\n\nthree\n")
+      editor.setCursorBufferPosition([0, 5])
+      atom.commands.dispatch editorView, 'shrink-whitespace:shrink'
+      expect(editor.getText()).toBe("one two\n\nthree\n")
+      expect(editor.getCursorBufferPosition()).toEqual({row: 0, column: 4})
+
+      # Check boundary condition
+      editor.setText("one\t   \t two\n\nthree\n")
+      editor.setCursorBufferPosition([0, 3])
+      atom.commands.dispatch editorView, 'shrink-whitespace:shrink'
+      expect(editor.getText()).toBe("one two\n\nthree\n")
+      expect(editor.getCursorBufferPosition()).toEqual({row: 0, column: 4})
+
+
+    it "Changes a single space into no spaces", ->
+      atom.commands.dispatch editorView, 'shrink-whitespace:shrink'
+      waitsForPromise ->
+        activationPromise
+
+      editor.setText("one two\n\nthree\n")
+      editor.setCursorBufferPosition([0, 4])
+      atom.commands.dispatch editorView, 'shrink-whitespace:shrink'
+      expect(editor.getText()).toBe("onetwo\n\nthree\n")
+      expect(editor.getCursorBufferPosition()).toEqual({row: 0, column: 3})
