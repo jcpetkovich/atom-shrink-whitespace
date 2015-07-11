@@ -22,7 +22,7 @@ module.exports = ShrinkWhitespace =
     lineText = cursor.getCurrentBufferLine()
     /\S/.test lineText
 
-  getMeatlesLineRange: (cursor) ->
+  getMeatlessLineRange: (cursor) ->
     oldPosition = cursor.getBufferPosition()
     range = cursor.marker.getBufferRange()
     rowmin = 0
@@ -92,7 +92,7 @@ module.exports = ShrinkWhitespace =
     cursor.editor.setTextInBufferRange(range, "")
 
   deleteBlankLines: (cursor) ->
-    range = @getMeatlesLineRange(cursor)
+    range = @getMeatlessLineRange(cursor)
     if range.isSingleLine()
       cursor.editor.deleteLine()
     else
