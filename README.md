@@ -1,5 +1,7 @@
 # shrink-whitespace package
 
+[![Build Status](https://travis-ci.org/jcpetkovich/atom-shrink-whitespace.svg?branch=master)](https://travis-ci.org/jcpetkovich/atom-shrink-whitespace)
+
 This package is a port of my [shrink-whitespace.el](https://github.com/jcpetkovich/shrink-whitespace.el) package from Emacs to atom. I did this as an experiment to see how easy it was to develop atom packages, and what the API was like.
 
 ![A screenshot of your package](https://f.cloud.github.com/assets/69169/2290250/c35d867a-a017-11e3-86be-cd7c5bf3ff9b.gif)
